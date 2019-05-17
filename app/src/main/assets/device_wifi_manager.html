@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WI-FI管理</title>
+
+    <script type="text/javascript" src="app.js"></script>
+</head>
+<body>
+    <button onclick="openWifi()">打开WI-FI</button>
+    <button onclick="closeWifi()">关闭WI-FI</button>
+    <button onclick="getWifiList()">获取WI-FI列表</button>
+    <button onclick="connectWifi()">连接WI-FI</button>
+    <button onclick="getConnectedWifi()">获取已连接WI-FI</button>
+
+    <script>
+        function openWifi() {
+            if (app.openWifi()) {
+                alert("WI-FI开启成功");
+            }
+        }
+
+        function closeWifi() {
+            if (app.closeWifi()) {
+                alert("WI-FI关闭成功");
+            }
+        }
+
+        function getWifiList() {
+            var list = app.getWifiList();
+            if (list) {
+                var str = '';
+                list.forEach(function (wifiInfo, index) {
+                    if (wifiInfo) {
+                        str += wifiInfo.SSID;
+                        str += '\n';
+                    }
+                });
+                alert(str);
+            }
+        }
+
+        function connectWifi() {
+            var result = app.connectWifi({
+                SSID: 'TP-LINK_47BC', //'吴杰的 iPhone',
+                //password: '12345678',
+                cipherType: 'none'
+            });
+            alert(result);
+        }
+
+        function getConnectedWifi() {
+            var wifiInfo = app.getConnectedWifi();
+            if (wifiInfo) {
+                alert(wifiInfo.SSID);
+            }
+        }
+    </script>
+</body>
+</html>

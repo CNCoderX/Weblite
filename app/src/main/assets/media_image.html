@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片</title>
+
+    <script type="text/javascript" src="app.js"></script>
+
+    <style>
+        .top_button {
+            height: 45px;
+            line-height: 45px;
+            text-align: center;
+            background-color: white;
+        }
+        .top_button:active {
+            background-color: #E0E0E0;
+        }
+    </style>
+</head>
+<body style="margin: 0; background-color: #F4F4F4">
+    <div style="display: flex; border-bottom: 1px solid #F0F0F0;">
+        <div class="top_button" style="flex: 1" onclick="(function() {
+            app.pickImage({
+                source: 'gallery',
+                maxWidth: 120,
+                maxHeight: 120,
+                success: function(scaled, source) {
+                    document.getElementById('source').innerText = source;
+                    document.getElementById('preview').src = scaled;
+                }
+            })
+        })()">
+            本地图片
+        </div>
+        <div class="top_button" style="flex: 1" onclick="(function() {
+            app.scanCode({
+                type: 'QR_CODE',
+                success: function(content) {
+                    document.getElementById('source').innerText = content;
+                    document.getElementById('preview').src = content;
+                }
+            })
+        })()">
+            网络图片
+        </div>
+        <div class="top_button" style="flex: 1" onclick="(function() {
+            app.pickImage({
+                source: 'camera',
+                maxWidth: 120,
+                maxHeight: 120,
+                success: function(scaled, source) {
+                    document.getElementById('source').innerText = source;
+                    document.getElementById('preview').src = scaled;
+                }
+            })
+        })()">
+            拍照
+        </div>
+    </div>
+    <div style="margin: 10px">
+        <p style="font-size: small">点击图片预览源图</p>
+        <img id="preview" style="width: 120px; height: 120px; display: block" onclick="(function() {
+            var source_url = document.getElementById('source').innerText;
+            if (source_url && source_url.length > 0) {
+                app.previewImage({
+                    url: source_url
+                });
+            }
+        })()">
+        <p id="source" style="word-wrap: break-word;"></p>
+    </div>
+</body>
+</html>

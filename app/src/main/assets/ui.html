@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>界面UI</title>
+
+    <script type="text/javascript" src="app.js"></script>
+</head>
+<body>
+    <button onclick="notification()">发送一条通知</button>
+
+    <script>
+        function notification() {
+            app.showNotification({
+                autoCancel: true,
+                id: 1,
+                contentTitle: 'title',
+                contentText: 'text',
+                contentInfo: 'info',
+                number: 3,
+                sound: 'sdcard/Music/msg.wav',
+                vibrate: [0, 300, 500, 700],
+                navigateTo: 'file:///android_asset/file.html',
+            })
+        }
+    </script>
+</body>
+</html>

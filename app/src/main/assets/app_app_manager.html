@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>应用管理</title>
+
+    <script type="text/javascript" src="app.js"></script>
+</head>
+<body>
+    <button onclick="installApp()">安装app</button>
+    <button onclick="uninstallApp()">卸载app</button>
+    <button onclick="appInstalled()">app是否安装</button>
+    <button onclick="launchApp()">启动app</button>
+
+    <script>
+        function installApp() {
+            app.download({
+                url: "http://222.240.205.137:2345/Topevery.ClientUpdate.Web/ClientUpdate.ashx?appName=ty_um&versionName=5.1.0",
+                success: function (code, headers, path) {
+                    app.installApp({
+                        path: path
+                    });
+                }
+            });
+        }
+
+        function uninstallApp() {
+            app.uninstallApp({
+                packageName: "topevery.zhcg.client"
+            })
+        }
+
+        function appInstalled() {
+            var result = app.appInstalled({
+                packageName: "topevery.zhcg.client"
+            });
+            alert(result);
+        }
+
+        function launchApp() {
+            var result = app.launchApp({
+                packageName: "com.topevery.um",
+                className: "com.topevery.um.TestActivity",
+                data: [
+                    {
+                        key: 'boolean_key',
+                        value: 'true',
+                        type: 'boolean'
+                    },
+                    {
+                        key: 'byte_key',
+                        value: '1',
+                        type: 'byte'
+                    },
+                    {
+                        key: 'short_key',
+                        value: '2',
+                        type: 'short'
+                    },
+                    {
+                        key: 'int_key',
+                        value: '3',
+                        type: 'integer'
+                    },
+                    {
+                        key: 'long_key',
+                        value: '4',
+                        type: 'long'
+                    },
+                    {
+                        key: 'float_key',
+                        value: '5.1',
+                        type: 'float'
+                    },
+                    {
+                        key: 'double_key',
+                        value: '5.2',
+                        type: 'double'
+                    },
+                    {
+                        key: 'string_key',
+                        value: 'hello',
+                        type: 'string'
+                    },
+                    {
+                        key: 'boolean_array_key',
+                        value: '[true, false, true, true]',
+                        type: 'boolean[]'
+                    },
+                    {
+                        key: 'byte_array_key',
+                        value: '[1]',
+                        type: 'byte[]'
+                    },
+                    {
+                        key: 'short_array_key',
+                        value: '[1, 2]',
+                        type: 'short[]'
+                    },
+                    {
+                        key: 'int_array_key',
+                        value: '[1, 2, 3, 4]',
+                        type: 'integer[]'
+                    },
+                    {
+                        key: 'long_array_key',
+                        value: '[1, 2, 3, 4, 5, 6, 7, 8]',
+                        type: 'long[]'
+                    },
+                    {
+                        key: 'float_array_key',
+                        value: '[5.1, 5.2, 5.3]',
+                        type: 'float[]'
+                    },
+                    {
+                        key: 'double_array_key',
+                        value: '[5.1, 5.2, 5.3]',
+                        type: 'double[]'
+                    },
+                    {
+                        key: 'string_array_key',
+                        value: '[hello, world, java]',
+                        type: 'string[]'
+                    },
+                ]
+            });
+            alert(result);
+        }
+    </script>
+</body>
+</html>

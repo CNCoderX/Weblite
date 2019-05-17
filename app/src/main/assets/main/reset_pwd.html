@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改密码</title>
+
+    <script type="text/javascript" src="../app.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #F4F4F4;
+            overflow:hidden;
+        }
+
+        #main-title {
+            width: 100%;
+            height: 45px;
+            line-height: 45px;
+            text-align: center;
+            font-size: 20px;
+            color: white;
+            background-color: #009aff;
+        }
+
+        #main-content {
+            width: auto;
+            padding: 20px;
+        }
+
+        .table {
+            width: 100%;
+            display: table;
+        }
+
+        .table-row {
+            display: table-row;
+        }
+
+        .table-cell {
+            display: table-cell;
+        }
+
+        .form-key {
+            width: 80px;
+            height: 38px;
+            line-height: 38px;
+            font-size: 15px;
+            padding-left: 10px;
+            color: #aeaeae;
+            background-color: white;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 38px;
+            line-height: 38px;
+            font-size: 15px;
+            color: #009aff;
+            border: 0;
+            background-color: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+        }
+
+        .divider {
+            height: 1px;
+        }
+
+        #btn-save {
+            width: 100%;
+            height: 38px;
+            line-height: 38px;
+            text-align: center;
+            color: white;
+            font-size: 16px;
+            margin-top: 10px;
+            background-color: #009aff;
+        }
+
+        #btn-save:active {
+            background-color: #0083d9;
+        }
+
+    </style>
+</body>
+</head>
+<body>
+
+<div id="main-title">
+    修改密码
+</div>
+
+<div id="main-content">
+    <div class="table">
+        <div class="table-row">
+            <div class="table-cell form-key">旧密码</div>
+            <input id="input-old-pwd" class="table_col form-input" type="text" class="form-input">
+        </div>
+        <div class="divider"></div>
+        <div class="table-row">
+            <div class="table-cell form-key">新密码</div>
+            <input id="input-new-pwd" class="table_col form-input" type="text" class="form-input">
+        </div>
+        <div class="divider"></div>
+        <div class="table-row">
+            <div class="table-cell form-key">密码确认</div>
+            <input id="input-new-pwd2" class="table_col form-input" type="text" class="form-input">
+        </div>
+    </div>
+
+    <div type="button" id="btn-save" onclick="save()">保 存</div>
+</div>
+
+<script>
+    function save() {
+        var user = null;
+        var pwd = null;
+        var prefs = app.createPreferences("auth.pref");
+        if (prefs) {
+            user = prefs.get("username");
+            pwd = prefs.get("password");
+            prefs.release();
+        }
+
+        var oldPwd = document.getElementById('input-old-pwd').value;
+        var newPwd = document.getElementById('input-new-pwd').value;
+        var newPwd2 = document.getElementById('input-new-pwd2').value;
+        if (!oldPwd || oldPwd.length === 0) {
+            app.showToast({
+                text: "请输入旧密码"
+            });
+            return;
+        }
+        if (pwd) {
+            if (oldPwd != pwd) {
+                app.showToast({
+                    text: "输入的旧密码不正确"
+                });
+                return;
+            }
+        }
+        if (!newPwd || newPwd.length === 0) {
+            app.showToast({
+                text: "请输入新密码"
+            });
+            return;
+        }
+        if (newPwd == oldPwd) {
+            app.showToast({
+                text: "新密码不能和旧密码相同"
+            });
+            return;
+        }
+        if (!newPwd2 || newPwd2.length === 0) {
+            app.showToast({
+                text: "请确认新密码"
+            });
+            return;
+        }
+        if (newPwd != newPwd2) {
+            app.showToast({
+                text: "两次输入的新密码不一致"
+            });
+            return;
+        }
+
+        // var ip = "192.168.20.215";
+        // var prefs = app.createPreferences("settings.pref");
+        // if (prefs) {
+        //     ip = prefs.get("server_ip");
+        //     prefs.release();
+        // }
+        var host = app.getHost();
+
+        app.request({
+            url: "http://" + host + "/WebApi/API/Leader/UpdatePwd",
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: {
+                "LoginName": user,
+                "LoginPwd": newPwd
+            },
+            success: function (code, headers, data) {
+                data = decodeURIComponent(data);
+                var result = JSON.parse(data);
+                if (result && result.IsSuccess) {
+                    var prefs = app.createPreferences("auth.pref");
+                    if (prefs) {
+                        prefs.set("username", user);
+                        prefs.set("password", newPwd);
+                        prefs.release();
+                    }
+                    app.showToast({
+                        text: "修改成功"
+                    });
+                } else {
+                    app.showToast({
+                        text: "修改失败"
+                    });
+                }
+            },
+            failure: function (errMsg) {
+                app.showToast({
+                    text: "修改失败"
+                });
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

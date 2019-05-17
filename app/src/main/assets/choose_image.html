@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ChooseImage</title>
+
+    <script type="text/javascript" src="app.js"></script>
+</head>
+<body>
+    <img src="" id="image1">
+    <button onclick="previewPhoto()">预览</button>
+    <button onclick="pickPhoto()">相册</button>
+    <button onclick="takePhoto()">拍照</button>
+    <script>
+        var photoPath;
+
+        function previewPhoto() {
+            // app.previewImage("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1533818073064&di=8003683040e79826f6edc8e50b1603d3&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Fcf1b9d16fdfaaf51ae21937e805494eef11f7a34.jpg");
+            app.previewImage({
+                // url: '/storage/emulated/0/pp/downloader/openscreen/screen_lock_33859.png'
+                url: photoPath
+            })
+        }
+
+        function pickPhoto() {
+            app.pickImage({
+                maxWidth: 100,
+                maxHeight: 100,
+                success: function (scaledImage, sourceImage) {
+                    photoPath = sourceImage;
+                    console.log(scaledImage);
+                    console.log(sourceImage);
+                    var e = document.getElementById('image1');
+                    e.src = scaledImage;
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        }
+
+        function takePhoto() {
+            app.pickImage({
+                source: 'camera',
+                maxWidth: 100,
+                maxHeight: 100,
+                success: function (scaledImage, sourceImage) {
+                    var e = document.getElementById('image1');
+                    e.src = scaledImage;
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

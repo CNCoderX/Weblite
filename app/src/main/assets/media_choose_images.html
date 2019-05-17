@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>选择多张图片</title>
+
+    <script type="text/javascript" src="app.js"></script>
+</head>
+<body>
+    <button onclick="chooseImages()">选择3张图片</button>
+    <button onclick="previewImage()">预览图片</button>
+
+    <script>
+        function chooseImages() {
+            app.chooseImages({
+                maxSize: 3,
+                maxWidth: 1024,
+                maxHeight: 1024,
+                success: function (scaledImages, sourceImages) {
+                    scaledImages.forEach(function (path, index) {
+                       console.log("scaled-image-" + index + ":" + path);
+                    });
+                    sourceImages.forEach(function (path, index) {
+                        console.log("source-image-" + index + ":" + path);
+                    });
+                    app.previewImages({
+                        urls: scaledImages
+                    });
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            })
+        }
+
+        function previewImage() {
+            app.previewImage({
+                // current: 10,
+                // urls: [
+                //     "http://appimg.hicloud.com/hwmarket/files/application/screenshut1/3a3f2027bf524774bf8f212c5b7115df.jpg",
+                //     "http://appimg.hicloud.com/hwmarket/files/application/screenshut2/3a3f2027bf524774bf8f212c5b7115df.jpg",
+                //     "http://appimg.hicloud.com/hwmarket/files/application/screenshut3/3a3f2027bf524774bf8f212c5b7115df.jpg",
+                //     "http://appimg.hicloud.com/hwmarket/files/application/screenshut4/3a3f2027bf524774bf8f212c5b7115df.jpg",
+                //     "http://appimg.hicloud.com/hwmarket/files/application/screenshut5/3a3f2027bf524774bf8f212c5b7115df.jpg"
+                // ]
+                url: "http://appimg.hicloud.com/hwmarket/files/application/screenshut1/3a3f2027bf524774bf8f212c5b7115df.png2"
+            })
+        }
+    </script>
+</body>
+</html>

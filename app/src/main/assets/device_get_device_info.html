@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>设备信息</title>
+
+    <script type="text/javascript" src="app.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="table.css" />
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>值</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>版本信息</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>基板名称</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>引导程序版本号</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>品牌</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>驱动名称</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>显示的版本包</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>设备唯一标识</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>硬件名称</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>主机地址</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>版本ID</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>制造商</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>手机的型号</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>整个产品的名称</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>标签</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>版本类型</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>是否为模拟器</th>
+                <th></th>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function setTableText(index, text) {
+            var tbody = document.getElementsByTagName('tbody')[0];
+            var tr = tbody.getElementsByTagName('tr')[index];
+            var th = tr.getElementsByTagName('th')[1];
+            th.innerText = text;
+        }
+
+        var devInfo = app.getDeviceInfo();
+        if (devInfo) {
+            setTableText(0, devInfo.version.sdkInt);
+            setTableText(1, devInfo.board);
+            setTableText(2, devInfo.bootloader);
+            setTableText(3, devInfo.brand);
+            setTableText(4, devInfo.device);
+            setTableText(5, devInfo.display);
+            setTableText(6, devInfo.fingerprint);
+            setTableText(7, devInfo.hardware);
+            setTableText(8, devInfo.host);
+            setTableText(9, devInfo.id);
+            setTableText(10, devInfo.manufacturer);
+            setTableText(11, devInfo.model);
+            setTableText(12, devInfo.product);
+            setTableText(13, devInfo.tags);
+            setTableText(14, devInfo.type);
+            setTableText(15, devInfo.isEmulator);
+        }
+
+    </script>
+
+    <!--<button onclick="getDeviceInfo()">设备信息</button>-->
+    <!--<button onclick="getLocation()">当前位置</button>-->
+    <!--<button onclick="callPhone()">拨打电话</button>-->
+    <!--<button onclick="sendSMS()">发送短信</button>-->
+    <!--<button onclick="captureScreen()">截屏</button>-->
+    <!--<button onclick="vibrate()">震动</button>-->
+    <!--<button onclick="printPDF()">打印PDF</button>-->
+    <!--<button onclick="scanCode()">扫码</button>-->
+    <!--<script>-->
+        <!--function getDeviceInfo() {-->
+            <!--var deviceInfo = app.getDeviceInfo();-->
+            <!--if (deviceInfo) {-->
+                <!--alert("board:" + deviceInfo.board);-->
+                <!--alert("brand:" + deviceInfo.brand);-->
+                <!--alert("device:" + deviceInfo.device);-->
+                <!--alert("host:" + deviceInfo.host);-->
+                <!--alert("model:" + deviceInfo.model);-->
+                <!--alert("version:" + deviceInfo.version.sdkInt);-->
+                <!--alert("IMEI:" + app.getIMEI());-->
+                <!--alert("networkType:" + app.getNetworkType());-->
+            <!--}-->
+        <!--}-->
+
+        <!--function getPackageInfo() {-->
+            <!--var pkgInfo = app.getPackageInfo();-->
+            <!--if (pkgInfo) {-->
+                <!--var appName = pkgInfo.appName;-->
+                <!--var pkgName = pkgInfo.pkgName;-->
+                <!--var versionCode = pkgInfo.versionCode;-->
+                <!--var versionName = pkgInfo.versionName;-->
+            <!--}-->
+        <!--}-->
+
+        <!--function getLocation() {-->
+            <!--app.getLocation({-->
+                <!--success: function (location) {-->
+                    <!--if (location) {-->
+                        <!--location = JSON.parse(location);-->
+                        <!--var longitude = location.longitude;-->
+                        <!--var latitude = location.latitude;-->
+                        <!--alert(longitude + ";" + latitude);-->
+                    <!--}-->
+                <!--},-->
+                <!--failure: function (errMsg) {-->
+                    <!--alert(errMsg);-->
+                <!--}-->
+            <!--});-->
+        <!--}-->
+
+        <!--function callPhone() {-->
+            <!--app.makePhoneCall({-->
+                <!--phoneNumber: "13272019770"-->
+            <!--});-->
+        <!--}-->
+
+        <!--function sendSMS() {-->
+            <!--app.makeSMS({-->
+                <!--phoneNumber: "13272019770",-->
+                <!--message: "hello!"-->
+            <!--});-->
+        <!--}-->
+
+        <!--app.setClipboardData({-->
+           <!--data: "clipboard data"-->
+        <!--});-->
+
+        <!--function captureScreen() {-->
+            <!--app.captureScreen({-->
+                <!--success: function (imagePath) {-->
+
+                <!--},-->
+                <!--failure: function (errMsg) {-->
+                    <!--alert(errMsg);-->
+                <!--}-->
+            <!--});-->
+        <!--}-->
+
+        <!--function vibrate() {-->
+            <!--app.vibrate({-->
+                <!--duration: 15-->
+            <!--});-->
+        <!--}-->
+
+        <!--function printPDF() {-->
+            <!--// app.printDocument({-->
+            <!--//    name: "电子文书",-->
+            <!--//    path: "sdcard/abcd.pdf"-->
+            <!--// });-->
+
+            <!--// app.printPicture({-->
+            <!--//     name: "图片",-->
+            <!--//     path: "sdcard/DCIM/Camera/IMG_20180315_164656.jpg"-->
+            <!--// });-->
+
+            <!--app.download({-->
+                <!--url: "http://192.168.20.96:8888/Views/OfficialTable/1.pdf",-->
+                <!--success: function (code, headers, path) {-->
+                    <!--app.printDocument({-->
+                        <!--path: path-->
+                    <!--})-->
+                <!--}-->
+            <!--})-->
+        <!--}-->
+
+        <!--function scanCode() {-->
+            <!--app.scanCode({-->
+                <!--type: 'BAR_CODE',-->
+                <!--success: function (content) {-->
+                    <!--alert(content);-->
+                    <!--console.log(content);-->
+                <!--},-->
+                <!--failure: function (errMsg) {-->
+                    <!--alert(errMsg);-->
+                <!--}-->
+            <!--});-->
+        <!--}-->
+    <!--</script>-->
+</body>
+</html>

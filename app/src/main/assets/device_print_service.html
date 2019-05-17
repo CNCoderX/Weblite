@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>打印</title>
+
+    <script type="text/javascript" src="app.js"></script>
+</head>
+
+<body>
+    <div style="display: flex">
+        <input id="input_pdf" type="text" name="PDF File" style="flex: 1">
+        <input type="button" value="选择文档" onclick="(function() {
+            app.chooseFile({
+                accept: 'application/pdf',
+                success: function(path) {
+                    document.getElementById('input_pdf').value = path;
+                }
+            })
+        })()">
+        <input type="button" value="打印文档" onclick="(function () {
+            // var path = document.getElementById('input_pdf').value;
+            // if (path) {
+            //     // app.printDocument({
+            //     //     name: 'PDF File',
+            //     //     path: path
+            //     // })
+            //     app.canonPrint({
+            //         url: path
+            //     });
+            // }
+
+            app.canonPrint({
+                url:'http://file3.data.weipan.cn/140823690/882483f400b7e1de465a4a6d3d1cf26a1566972d?ip=1535171547,222.240.205.137&ssig=xlXPOga6Lk&Expires=1535172147&KID=sae,l30zoo1wmz&fn=%E6%96%87%E6%A1%A3.pdf&se_ip_debug=222.240.205.137&from=1221134'
+            });
+        })()">
+    </div>
+
+    <br>
+    <br>
+    <br>
+
+    <div style="display: flex">
+        <input id="input_pic" type="text" name="PIC File" style="flex: 1">
+        <input type="button" value="选择图片" onclick="(function() {
+            app.chooseFile({
+                accept: 'image/jpeg',
+                success: function(path) {
+                    document.getElementById('input_pic').value = path;
+                }
+            })
+        })()">
+        <input type="button" value="打印图片" onclick="(function () {
+            var path = document.getElementById('input_pic').value;
+            if (path) {
+                app.printPicture({
+                    name: 'PIC File',
+                    path: path
+                });
+            }
+        })()">
+    </div>
+</body>
+</html>

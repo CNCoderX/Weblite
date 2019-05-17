@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>设置</title>
+
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="base.js"></script>
+    <link rel="stylesheet" href="weui.min.css" />
+    <script type="text/javascript" src="../app.js"></script>
+
+    <style>
+        body {
+            background-color: #F4F4F4;
+            padding: 0;
+            margin: 0;
+        }
+        ul {
+            padding: 0;
+            margin: 0;
+        }
+        ul li {
+            display: flex;
+            height: 48px;
+            line-height: 48px;
+            list-style-type: none;
+            font-size: 16px;
+            border-bottom: 1px solid #F0F0F0;
+            background-color: white;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        ul li:active {
+            background-color: #E0E0E0;
+        }
+
+        ul > li:first-child {
+            border-top: 1px solid #F0F0F0;
+        }
+
+        .space {
+            width: 100%;
+            height: 10px;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .li-span-right {
+            flex: 1;
+            width: 100%;
+            font-size: 14px;
+            color: #a0a0a0;
+            text-align: right
+        }
+    </style>
+</head>
+<body>
+<ul>
+    <div class="space"></div>
+    <li onclick="window.parent.open('reset_pwd.html', '_parent')">
+        <span>修改密码</span>
+    </li>
+    <li onclick="upgrade()">
+        <span>版本更新</span>
+        <span id="version" class="li-span-right"></span>
+    </li>
+    <div class="space"></div>
+    <li onclick="exit()">
+        <span>退出账号</span>
+    </li>
+
+    <script>
+        window.onload = function () {
+            var pkgInfo = app.getPackageInfo();
+            if (pkgInfo) {
+                var version = document.getElementById('version');
+                version.innerText = pkgInfo.versionName;
+            }
+        };
+
+        function upgrade() {
+            var version = document.getElementById('version');
+            version = version.innerText;
+
+            app.request({
+                url: "http://192.168.20.215/WebAppUpdate/UpList.aspx",
+                success: function (code, headers, data) {
+                    data = decodeURIComponent(data);
+                    var upgradeInfos = parseUpgradeInfos(data);
+                    if (upgradeInfos) {
+                        upgradeInfos.some(function (upgradeInfo, index, array) {
+                            if (upgradeInfo.typeName == "com.topevery.um"
+                                    && upgradeInfo.name > version) {
+
+                                var title = "发现新版本 " + upgradeInfo.name;
+                                var feature = decodeURIComponent(upgradeInfo.feature);
+                                lcommon.page.showDialog2(title, feature, function () {
+                                    lcommon.page.showLoad("正在下载，请稍候..");
+                                    app.download({
+                                        url: decodeURIComponent(upgradeInfo.downloadUrl),
+                                        success: function (code, headers, path) {
+                                            lcommon.page.hideLoad();
+                                            app.installApp({
+                                                path: path
+                                            });
+                                        },
+                                        failure: function (errMsg) {
+                                            lcommon.page.hideLoad();
+                                            app.showToast({
+                                                text: "更新失败"
+                                            });
+                                        }
+                                    });
+                                });
+                                return true;
+                            }
+
+                            if (array.length - 1 === index) {
+                                app.showToast({
+                                    text: "当前版本已是最新"
+                                });
+                            }
+                        });
+                    }
+                },
+                failure: function (errMsg) {
+                    app.showToast({
+                        text: "更新失败"
+                    });
+                }
+            })
+        }
+
+        function parseUpgradeInfos(str) {
+            var upgradeInfos = [];
+            var sections = str.split("|");
+            sections.forEach(function (section) {
+                var attrs = section.split("$");
+                var upgradeInfo = {};
+                upgradeInfo.typeName = attrs[0];
+                upgradeInfo.fileName = attrs[1];
+                upgradeInfo.name = attrs[2];
+                upgradeInfo.feature = attrs[3];
+                upgradeInfo.downloadUrl = attrs[4];
+                upgradeInfos.push(upgradeInfo);
+            });
+            return upgradeInfos;
+        }
+
+        function exit() {
+            lcommon.page.showDialog2("提示", "确定要退出执法通吗？", function () {
+                var prefs = app.createPreferences("auth.pref");
+                if (prefs) {
+                    prefs.clear();
+                    prefs.release();
+                }
+                app.launchApp({
+                    packageName: "com.topevery.um",
+                    className: "com.topevery.um.LoginActivity"
+                });
+                // app.exit();
+                window.parent.close();
+            });
+        }
+    </script>
+</ul>
+</body>
+</html>

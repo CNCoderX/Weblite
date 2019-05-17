@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Network</title>
+
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="io.js"></script>
+</head>
+<body>
+<button onclick="getBaidu()">请求数据</button>
+<button onclick="uploadFile()">上传文件</button>
+<button onclick="downloadFile()">下载文件</button>
+<button onclick="vop()">语音识别</button>
+<script>
+    function getBaidu() {
+        app.request({
+            url: 'http://api.qingyunke.com/api.php',
+            data: {
+                key: 'free',
+                appid: 0,
+                msg: '周杰伦'
+            },
+            headers: {
+                'content-type': 'application/json'
+            },
+            timeout: 10000,
+            success: function (code, headers, data) {
+                alert(code);
+                alert(decodeURIComponent(data));
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+
+    String.prototype.format = function(args) {
+        var result = this;
+        if (arguments.length > 0) {
+            if (arguments.length == 1 && typeof (args) == "object") {
+                for (var key in args) {
+                    if(args[key]!=undefined){
+                        var reg = new RegExp("({" + key + "})", "g");
+                        result = result.replace(reg, args[key]);
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < arguments.length; i++) {
+                    if (arguments[i] != undefined) {
+                        //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题，谢谢何以笙箫的指出
+
+                        var reg= new RegExp("({)" + i + "(})", "g");
+                        result = result.replace(reg, arguments[i]);
+                    }
+                }
+            }
+        }
+        return result;
+    };
+
+    Date.prototype.format = function () {
+        var year = this.getFullYear(),
+            month = this.getMonth() + 1,
+            day = this.getDate(),
+            hour = this.getHours(),
+            min = this.getMinutes(),
+            sec = this.getSeconds();
+        var result = year + '-' +
+            (month < 10 ? '0' + month : month) + '-' +
+            (day < 10 ? '0' + day : day) + ' ' +
+            (hour < 10 ? '0' + hour : hour) + ':' +
+            (min < 10 ? '0' + min : min) + ':' +
+            (sec < 10 ? '0' + sec : sec);
+
+        return result;
+    };
+
+    // var file = app.getFileInfo("sdcard/Music/test.mp3");
+
+    function uploadFile() {
+        // var url = "http://192.168.20.215/WebPdaService/Handlers/upload.ashx?fn={0}&sfn={1}&pos={2}&tlen={3}&sdt={4}&pictypessp={5}";
+        // url = url.format(file.name, "000000-000000", 0, file.length, new Date().format(), 99);
+        // app.upload(url, "file", "sdcard/Music/test.mp3", {
+        //     response: function (code, headers, data) {
+        //         alert(code);
+        //         alert(decodeURIComponent(data));
+        //     },
+        //     failure: function (errMsg) {
+        //         alert(errMsg);
+        //     }
+    // })
+
+        app.pickImage({
+            maxWidth: 100,
+            maxHeight: 100,
+            success: function (scaledImage, sourceImage) {
+                alert(scaledImage);
+                var file = app.getFileInfo({
+                    path: scaledImage
+                });
+                var url = "http://192.168.20.215/WebPdaService/Handlers/upload.ashx?fn={0}&sfn={1}&pos={2}&tlen={3}&sdt={4}&pictypessp={5}";
+                url = url.format(file.name, "000000-000000", 0, file.length, new Date().format(), 99);
+                app.upload({
+                    url: url,
+                    path: scaledImage,
+                    success: function (code, headers, data) {
+                        alert(code);
+                        alert(decodeURIComponent(data));
+                    },
+                    failure: function (errMsg) {
+                        alert(errMsg);
+                    }
+                })
+            }
+        })
+    }
+
+    function downloadFile() {
+        app.download("http://222.240.205.137:2345/Topevery.ClientUpdate.Web/ClientUpdate.ashx?appName=ty_um&versionName=5.1.0", {
+            dir:"D://Downloads",
+            response: function (code, headers, path) {
+                alert(decodeURIComponent(path));
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        })
+    }
+
+    function vop() {
+        // var recorder = app.createAudioRecorder({
+        //     format: 'wav',
+        //     sampleRate: 8000,
+        //     channels: 1,
+        //     bitPerSample: 16,
+        // });
+        // recorder.prepare();
+        // recorder.start();
+        //
+        // setTimeout(function () {
+        //     var audioPath = recorder.getAudioPath();
+        //     recorder.stop();
+        //     recorder.release();
+        //
+        //     setTimeout(function () {
+
+        // var audioPath = "file:///sdcard/16k.wav";
+        var audioPath = "file:///sdcard/Android/data/com.topevery.um/files/DCIM/Record/REC_20180821_115717.wav";
+                app.request({
+                    url: "https://aip.baidubce.com/oauth/2.0/token",
+                    data: {
+                        grant_type: "client_credentials",
+                        client_id: "wPVa7EQTFuZnemQEHyoDiaZp",
+                        client_secret: "62w0eLSPLPj2Px2455D9qlsrELFMoDEF"
+                    },
+                    success: function (code, headers, data) {
+                        var result = JSON.parse(decodeURIComponent(data));
+                        if (result && result["access_token"]) {
+                            // alert(result["access_token"]);
+
+
+                            var devId = app.getIMEI();
+                            var url = "http://vop.baidu.com/server_api?dev_pid=1536&cuid=" + devId + "&token=" + result["access_token"];
+                            app.upload({
+                                url: url,
+                                headers: {
+                                    "Content-Type": "audio/wav;rate=16000"
+                                },
+                                path: audioPath,
+                                success: function (code, headers, data) {
+                                    alert(decodeURIComponent(data));
+                                    var result = JSON.parse(decodeURIComponent(data));
+                                    if (result && result["result"]) {
+                                        alert(result["result"]);
+                                    }
+                                },
+                                failure: function (errMsg) {
+                                    alert(errMsg);
+                                }
+                            });
+                        }
+
+                    }
+                });
+    //         }, 2000);
+    //     }, 5000);
+    }
+</script>
+</body>
+</html>

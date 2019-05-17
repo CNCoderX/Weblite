@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name_cgt">城管通</string>
+    <string name="app_name_czt">处置通</string>
+    <string name="app_name_ldt">领导通</string>
+    <string name="app_name_smt">市民通</string>
+    <string name="app_name_zft">执法通</string>
+
+    <string name="login">登 录</string>
+    <string name="logining">正在登录..</string>
+    <string name="input_username_hint">请输入用户名</string>
+    <string name="input_password_hint">请输入密码</string>
+    <string name="toast_empty_user">帐号不能为空</string>
+    <string name="toast_empty_pwd">密码不能为空</string>
+    <string name="login_failure">登录失败</string>
+    <string name="server_setting">服务器配置</string>
+    <string name="failed_to_connect_server">连接服务器失败</string>
+    <string name="invalid_url">无效的URL链接</string>
+</resources>

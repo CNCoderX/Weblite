@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>剪切板</title>
+
+    <script type="text/javascript" src="app.js"></script>
+</head>
+
+<style>
+    textarea {
+        width: 100%;
+    }
+</style>
+<body>
+    <textarea id="copy_text_area" rows="3"></textarea>
+    <input type="button" value="复制文本" onclick="(function() {
+        app.setClipboardData({
+            data: document.getElementById('copy_text_area').value
+        })
+    })()">
+    <input type="button" value="清空" onclick="(function() {
+        document.getElementById('copy_text_area').value = '';
+    })()">
+
+    <br>
+    <br>
+    <br>
+
+    <textarea id="paste_text_area" rows="3" readonly="readonly"></textarea>
+    <input type="button" value="粘贴文本" onclick="(function() {
+        var data = app.getClipboardData();
+        document.getElementById('paste_text_area').value = data;
+    })()">
+    <input type="button" value="清空" onclick="(function() {
+        document.getElementById('paste_text_area').value = '';
+    })()">
+</body>
+</html>

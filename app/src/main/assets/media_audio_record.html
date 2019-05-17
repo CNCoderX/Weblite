@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%;">
+<head>
+    <meta charset="UTF-8">
+    <title>录制音频</title>
+
+    <script type="text/javascript" src="app.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="list.css"/>
+    <style>
+        body {
+            position: relative;
+            min-height:100%;
+            margin: 0;
+            padding:0;
+            background-color: #F4F4F4;
+            overflow: hidden;
+        }
+
+        #duration {
+            text-align: center;
+            font-size: xx-large;
+        }
+
+        #btn_rec {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: auto;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        #btn_rec_center {
+            height: 80px;
+            width: 80px;
+            margin: auto;
+            position: absolute;
+            z-index: 2;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border-radius: 50%;
+            background-color: #2a6496;
+        }
+
+        #btn_rec_effect {
+            height: 80px;
+            width: 80px;
+            max-width: 200px;
+            max-height: 200px;
+            margin: auto;
+            position: absolute;
+            z-index: 1;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border-radius: 50%;
+            background-color: #e4b9c0;
+            opacity: 0.5
+        }
+
+        #footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 180px;
+            background-color: white;
+            overflow:auto;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p id="duration">00:00</p>
+
+        <div id="btn_rec">
+            <div id="btn_rec_center"></div>
+            <div id="btn_rec_effect"></div>
+        </div>
+
+    </div>
+
+    <div id="footer">
+        <ul id="footer_list">
+        </ul>
+    </div>
+
+    <script>
+
+        var timer;
+        var recorder;
+
+        var onstart = function () {
+            timer = setTimeout("tick()", 1000);
+
+            recorder = app.createAudioRecorder({
+                format: 'mp3',
+            });
+            if (recorder) {
+                recorder.prepare();
+                recorder.start();
+            }
+        };
+
+        var onstop = function () {
+            if (this.timer) {
+                mins = 0;
+                secs = 0;
+                clearTimeout(this.timer);
+            }
+
+            if (recorder) {
+                var path = recorder.getAudioPath();
+                var file = app.getFileInfo({
+                    path: path
+                });
+
+                var footer_list = document.getElementById('footer_list');
+                footer_list.innerHTML += "<li>" + file.name + "</li>";
+
+                recorder.stop();
+                recorder.release();
+                recorder = null;
+            }
+        };
+
+        var mins = 0;
+        var secs = 0;
+
+        function tick() {
+            secs++;
+            if (secs === 60) {
+                secs = 0;
+                mins ++;
+            }
+            var duration = document.getElementById('duration');
+            duration.innerText = toTime();
+            timer = setTimeout("tick()", 1000);
+        }
+
+        function toTime() {
+            let time = '';
+            if (mins < 10) {
+                time += "0";
+                time += mins;
+            } else {
+                time += mins;
+            }
+            time += ':';
+            if (secs < 10) {
+                time += "0";
+                time += secs;
+            } else {
+                time += secs;
+            }
+            return time;
+        }
+
+        (function (onstart, onstop) {
+            var btn_rec_effect = document.getElementById('btn_rec_effect');
+            var style = document.defaultView.getComputedStyle(btn_rec_effect, null);
+            var oriWidth = parseInt(style.width);
+            var oriHeight = parseInt(style.height);
+            var maxWidth = parseInt(style.maxWidth);
+            var maxHeight = parseInt(style.maxHeight);
+            var width = oriWidth;
+            var height = oriHeight;
+            var opacity = 1;
+
+            var timerFunc = function(){
+                if (handler) {
+                    width += 2;
+                    height += 2;
+                    opacity -= 0.02;
+                    if (width > maxWidth) {
+                        width = maxWidth;
+                    }
+                    if (height > maxHeight) {
+                        height = maxHeight;
+                    }
+                    if (opacity < 0) {
+                        opacity = 0;
+                    }
+                    btn_rec_effect.setAttribute('style', 'width:' + width + 'px; height:' + height + 'px; opacity:' + opacity);
+                    if (width >= maxWidth && height >= maxHeight) {
+                        width = oriWidth;
+                        height = oriHeight;
+                        opacity = 1;
+                    }
+                    requestAnimationFrame(timerFunc);
+                }
+            };
+
+            var handler;
+
+            var btn_rec = document.getElementById('btn_rec');
+            btn_rec.addEventListener('touchstart', function (e) {
+                if (handler) {
+                    cancelAnimationFrame(handler);
+                }
+                handler = requestAnimationFrame(timerFunc);
+
+                onstart();
+            }, false);
+
+            btn_rec.addEventListener('touchend', function (e) {
+                if (handler) {
+                    cancelAnimationFrame(handler);
+                    handler = null;
+
+                    width = oriWidth;
+                    height = oriHeight;
+                    opacity = 1;
+                    btn_rec_effect.setAttribute('style', 'width:' + width + 'px; height:' + height + 'px; opacity:' + opacity);
+                }
+
+                onstop();
+            })
+        })(onstart, onstop);
+
+    </script>
+</body>
+</html>

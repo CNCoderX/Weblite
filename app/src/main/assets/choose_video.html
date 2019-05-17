@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ChooseImage</title>
+
+    <script type="text/javascript" src="app.js"></script>
+</head>
+<body>
+    <img src="" id="image1">
+    <button onclick="previewVideo()">预览</button>
+    <button onclick="pickVideo()">相册</button>
+    <button onclick="takeVideo()">拍摄</button>
+    <script>
+        function previewVideo() {
+            app.previewVideo({
+                url: "http://vjs.zencdn.net/v/oceans.mp4"
+            });
+        }
+
+        function pickVideo() {
+            app.pickVideo({
+                success: function (videoPath) {
+                    console.log(videoPath);
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        }
+
+        function takeVideo() {
+            app.pickVideo({
+                source: 'camera',
+                success: function (videoPath) {
+                    console.log(videoPath);
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

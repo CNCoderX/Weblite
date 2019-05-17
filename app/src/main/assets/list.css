@@ -1,0 +1,25 @@
+body {
+    background-color: #F4F4F4;
+    padding: 0;
+    margin: 0;
+}
+ul {
+    padding: 0;
+    margin: 0;
+}
+ul li {
+    height: 45px;
+    line-height: 45px;
+    list-style-type: none;
+    border-bottom: 1px solid #F0F0F0;
+    background-color: white;
+    padding-left: 10px;
+}
+
+ul li:active {
+    background-color: #E0E0E0;
+}
+
+ul > li:first-child {
+    border-top: 1px solid #F0F0F0;
+}

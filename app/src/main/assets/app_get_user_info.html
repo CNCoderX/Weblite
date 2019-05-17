@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户信息</title>
+
+    <script type="text/javascript" src="app.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="table.css" />
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>值</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>用户ID</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>用户名</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>手机号码</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>部门ID</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>部门名称</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>FID</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>角色ID</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>用户类型</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>登录信息</th>
+                <th></th>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function setTableText(index, text) {
+            var tbody = document.getElementsByTagName('tbody')[0];
+            var tr = tbody.getElementsByTagName('tr')[index];
+            var th = tr.getElementsByTagName('th')[1];
+            th.innerText = text;
+        }
+
+        var userInfo = app.getUserInfo();
+        if (userInfo) {
+            setTableText(0, userInfo.userId);
+            setTableText(1, userInfo.userName);
+            setTableText(2, userInfo.mobileNum);
+            setTableText(3, userInfo.userDept);
+            setTableText(4, userInfo.userDeptName);
+            setTableText(5, userInfo.fId);
+            setTableText(6, userInfo.roleIds);
+            setTableText(7, userInfo.userType);
+            setTableText(8, userInfo.loginMsg);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+}
+table {
+    width: 100%;
+    table-layout:fixed;
+    background-color: white;
+    overflow-x: hidden;
+}
+table thead tr {
+    background-color: #3071a9;
+    color: white;
+}
+table tbody tr:nth-child(odd) {
+    background-color: #e4b9c0;
+}
+table tbody tr:nth-child(even) {
+    background-color: #c9e2b3;
+}
+table thead tr:first-child {
+    width: 8em;
+}

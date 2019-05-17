@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>应用信息</title>
+
+    <script type="text/javascript" src="app.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="table.css" />
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>值</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>应用名称</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>应用包名</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>版本号</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>版本名称</th>
+                <th></th>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function setTableText(index, text) {
+            var tbody = document.getElementsByTagName('tbody')[0];
+            var tr = tbody.getElementsByTagName('tr')[index];
+            var th = tr.getElementsByTagName('th')[1];
+            th.innerText = text;
+        }
+
+        var pkgInfo = app.getPackageInfo();
+        if (pkgInfo) {
+            setTableText(0, pkgInfo.appName);
+            setTableText(1, pkgInfo.pkgName);
+            setTableText(2, pkgInfo.versionCode);
+            setTableText(3, pkgInfo.versionName);
+        }
+    </script>
+</body>
+</html>

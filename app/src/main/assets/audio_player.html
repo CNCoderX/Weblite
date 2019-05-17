@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AudioPlayer</title>
+
+    <script type="text/javascript" src="app.js"></script>
+</head>
+<body>
+    <button onclick="start()">开始</button>
+    <button onclick="resume()">继续</button>
+    <button onclick="pause()">暂停</button>
+    <button onclick="stop()">结束</button>
+
+    <script>
+        var player = app.createAudioPlayer({
+            loop: false,
+            volume: 1,
+            complete: function () {
+                alert('播放完毕');
+            },
+            error: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+
+        window.onload = function() {
+            player.prepare({
+                url: "file:///sdcard/Music/test.mp3",
+            });
+        };
+
+        window.onunload = function () {
+            player.release();
+        };
+
+        function start() {
+            player.start();
+        }
+
+        function resume() {
+            player.resume();
+        }
+
+        function pause() {
+            player.pause();
+        }
+
+        function stop() {
+            player.stop();
+        }
+
+        // var player = app.createSoundPlayer({
+        //     quality: 0,
+        //     volume: 1,
+        //     error: function (errMsg) {
+        //         alert(errMsg);
+        //     }
+        // });
+        //
+        // window.onload = function() {
+        //     player.prepare({
+        //         path: "file:///sdcard/Music/msg.wav",
+        //     });
+        // };
+        //
+        // window.onunload = function () {
+        //     player.release();
+        // };
+        //
+        // function start() {
+        //     player.start();
+        // }
+        //
+        // function resume() {
+        //     player.resume();
+        // }
+        //
+        // function pause() {
+        //     player.pause();
+        // }
+        //
+        // function stop() {
+        //     player.stop();
+        // }
+
+        // function start() {
+        //     app.playSound({
+        //         path: "file:///sdcard/Music/msg.wav"
+        //     });
+        // }
+        //
+        // function resume() {
+        //     app.playSound({
+        //         path: "file:///sdcard/Music/test.mp3"
+        //     });
+        // }
+
+    </script>
+</body>
+</html>

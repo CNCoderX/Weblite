@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>当前位置</title>
+
+    <script type="text/javascript" src="app.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="table.css" />
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>值</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>经度</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>纬度</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>速度</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>精确度</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>海拔</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>定位方式</th>
+                <th></th>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function setTableText(index, text) {
+            var tbody = document.getElementsByTagName('tbody')[0];
+            var tr = tbody.getElementsByTagName('tr')[index];
+            var th = tr.getElementsByTagName('th')[1];
+            th.innerText = text;
+        }
+
+        app.getBDLocation({
+            success: function (loc) {
+                setTableText(0, loc.longitude);
+                setTableText(1, loc.latitude);
+                setTableText(2, loc.speed);
+                setTableText(3, loc.accuracy);
+                setTableText(4, loc.altitude);
+                setTableText(5, loc.provider);
+            },
+            failure: function (errMsg) {
+                app.showToast({
+                    text: "获取位置失败"
+                });
+            }
+        });
+
+    </script>
+</body>
+</html>

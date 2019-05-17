@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>设备</title>
+
+    <script type="text/javascript" src="app.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="list.css"/>
+</head>
+<body>
+    <ul>
+        <li onclick="window.location.href='device_get_device_info.html'">设备信息</li>
+        <li onclick="getNetworkType()">网络状态</li>
+        <li onclick="window.location.href='device_get_location.html'">当前位置</li>
+        <li onclick="makePhoneCall()">拨打电话</li>
+        <li onclick="makeSMS()">发送短信</li>
+        <li onclick="window.location.href='device_clipboard.html'">剪切板</li>
+        <li onclick="captureScreen()">截屏</li>
+        <li onclick="vibrate()">振动</li>
+        <li onclick="window.location.href='device_print_service.html'">打印</li>
+        <li onclick="scanCode()">扫码</li>
+        <li onclick="window.location.href='device_wifi_manager.html'">WI-FI管理</li>
+    </ul>
+
+    <script>
+        function getNetworkType() {
+            var type = app.getNetworkType();
+            switch (type) {
+                case 0:
+                    app.showToast({
+                        text: "当前没有网络连接"
+                    });
+                    break;
+                case 1:
+                    app.showToast({
+                        text: "当前为wifi网络"
+                    });
+                    break;
+                case 2:
+                    app.showToast({
+                        text: "当前为2G网络"
+                    });
+                    break;
+                case 3:
+                    app.showToast({
+                        text: "当前为3G网络"
+                    });
+                    break;
+                case 4:
+                    app.showToast({
+                        text: "当前为4G网络"
+                    });
+                    break;
+            }
+        }
+
+        function getCurrentLocation() {
+            app.getLocation({
+                success: function (location) {
+
+                },
+                failure: function (failure) {
+
+                }
+            })
+        }
+
+        function makePhoneCall() {
+            app.makePhoneCall({
+                phoneNumber: "10000"
+            });
+        }
+
+        function makeSMS() {
+            app.makeSMS({
+                phoneNumber: "10000",
+                message: "hello"
+            })
+        }
+
+        function captureScreen() {
+            app.captureScreen({
+                success: function (imagePath) {
+                    app.previewImage({
+                        url: imagePath
+                    });
+                    app.showToast({
+                        text: "截图文件路径:" + imagePath
+                    });
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            })
+        }
+        
+        function vibrate() {
+            app.vibrate({
+                duration: 100
+            });
+        }
+
+        function scanCode() {
+            app.scanCode({
+                type: 'QR_CODE',
+                success: function (content) {
+                    app.showToast({
+                        text: "扫码结果： " + content
+                    });
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            })
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.GalleryActivity">
+
+    <item
+        android:id="@+id/action_positive"
+        android:title="@string/commit"
+        android:visible="false"
+        app:showAsAction="always" />
+</menu>

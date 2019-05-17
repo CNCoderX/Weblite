@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.topevery.um">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    
+    <application
+        android:name=".AppContext"
+        android:icon="@mipmap/ico_zft"
+        android:label="@string/app_name_zft"
+        android:theme="@style/AppTheme"
+        android:hardwareAccelerated="true">
+
+        <activity
+            android:icon="@mipmap/ico_cgt"
+            android:label="@string/app_name_cgt"
+            android:name=".launcher.CGTLauncher"
+            android:screenOrientation="portrait"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:icon="@mipmap/ico_ldt"
+            android:label="@string/app_name_ldt"
+            android:name=".launcher.LDTLauncher"
+            android:screenOrientation="portrait"
+            android:enabled="false">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:icon="@mipmap/ico_czt"
+            android:label="@string/app_name_czt"
+            android:name=".launcher.CZTLauncher"
+            android:screenOrientation="portrait"
+            android:enabled="false">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:icon="@mipmap/ico_smt"
+            android:label="@string/app_name_smt"
+            android:name=".launcher.SMTLauncher"
+            android:screenOrientation="portrait"
+            android:enabled="false">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:icon="@mipmap/ico_zft"
+            android:label="@string/app_name_zft"
+            android:name=".launcher.ZFTLauncher"
+            android:screenOrientation="portrait"
+            android:enabled="false">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:icon="@mipmap/ico_zft"
+            android:label="@string/app_name_zft"
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait"
+            android:enabled="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".WebActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize">
+
+            <!--<intent-filter>-->
+                <!--<action android:name="com.topevery.um.action.WEB" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+
+                <!--<data android:scheme="file" />-->
+                <!--<data android:scheme="http" />-->
+                <!--<data android:scheme="https" />-->
+            <!--</intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".ServerSettingActivity"
+            android:label="@string/server_setting"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.cncoderx.photopicker.ui.GalleryActivity"
+            android:theme="@style/PhotoPickerTheme"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name="com.cncoderx.photopicker.ui.PreviewActivity"
+            android:theme="@style/PhotoPickerTheme"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name="com.topevery.hybird.plugin.media.video.VideoActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+
+        <!---->
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation" />
+
+        <!--百度地图定位-->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
+
+        <service android:name=".UMPushMessageService" />
+
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="ZLxwFGMxcekxpwgSqKNO1qFcHCUpWhwE" />
+
+        <!--友盟消息推送-->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5b987807b27b0a0e6c000020" />
+
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="fd1834271fe5fd1cffdb1193337ea2a2" />
+
+        <meta-data
+            android:name="UMENG_MASTER_SECRET"
+            android:value="btkx2p2qletjtwv6xcmsyc03m2bnuclf" />
+
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="base" />
+
+    </application>
+
+</manifest>

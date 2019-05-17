@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AudioRecorder</title>
+
+    <script type="text/javascript" src="app.js"></script>
+</head>
+<body>
+    <button onclick="start()">开始</button>
+    <button onclick="resume()">继续</button>
+    <button onclick="pause()">暂停</button>
+    <button onclick="stop()">结束</button>
+
+    <script>
+        var recorder = app.createAudioRecorder({
+           format: "mp3",
+           error: function (errMsg) {
+               alert(errMsg);
+           }
+        });
+
+        window.onload = function() {
+            recorder.prepare();
+        };
+
+        window.onunload = function () {
+            recorder.release();
+        };
+
+        function start() {
+            recorder.start();
+        }
+
+        function resume() {
+            recorder.resume();
+        }
+
+        function pause() {
+            recorder.pause();
+        }
+
+        function stop() {
+            recorder.stop();
+        }
+
+    </script>
+</body>
+</html>

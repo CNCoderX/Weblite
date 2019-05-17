@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Source: D:/android/projects/TopeveryUMClient/app/src/main/assets/app.js</title>
+    
+    
+    
+    
+    
+    <meta property="og:title" content=""/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content=""/>
+    
+    <meta property="og:url" content=""/>
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="scripts/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/jaguar.css">
+    
+    
+    <script>
+    var config = {"monospaceLinks":true,"cleverLinks":true,"default":{"outputSourceFiles":true},"applicationName":"Demo","disqus":"","googleAnalytics":"","openGraph":{"title":"","type":"website","image":"","site_name":"","url":""},"meta":{"title":"","description":"","keyword":""},"linenums":false};
+    </script>
+    
+
+    
+</head>
+<body>
+<div id="wrap" class="clearfix">
+    
+<div class="navigation">
+    <h3 class="applicationName"><a href="index.html">Demo</a></h3>
+
+    <div class="search">
+        <input id="search" type="text" class="form-control input-sm" placeholder="Search Documentations">
+    </div>
+    <ul class="list">
+    
+    </ul>
+</div>
+    <div class="main">
+        <h1 class="page-title" data-filename="D__android_projects_TopeveryUMClient_app_src_main_assets_app.js.html">Source: D:/android/projects/TopeveryUMClient/app/src/main/assets/app.js</h1>
+        
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source "><code>const app = (function () {
+    var objects = new Map();
+    var callbacks = new Map();
+
+    window['callback'] = function (name) {
+        var callback = callbacks.get(name);
+        if (callback) {
+            if (arguments.length > 1) {
+                var args = Array.from(arguments).slice(1);
+                callback.apply(app, args);
+            } else {
+                callback.apply(app);
+            }
+        }
+    };
+
+    window['objectCallback'] = function (pointer, name) {
+        var object = objects.get(pointer);
+        if (object &amp;&amp; object[name]) {
+            if (arguments.length > 2) {
+                var args = Array.from(arguments).slice(2);
+                object[name].apply(object, args);
+            } else {
+                object[name].apply(object);
+            }
+        }
+    };
+
+    function invokeNativeFunc(_interface, _function) {
+        var android = window[_interface];
+        if (arguments.length > 2) {
+            var args = Array.from(arguments).slice(2);
+            return android[_function].apply(android, args);
+        } else {
+            return android[_function].apply(android);
+        }
+    }
+
+    function App() {
+    }
+
+    /**
+     * @module media
+     */
+(function (_interface) {
+        /**
+         * 预览图片
+         * @param path {string} 图片URL或图片的本地路径
+         */
+        App.prototype.previewPhoto = function (path) {
+            invokeNativeFunc(_interface, "previewPhoto", path);
+        };
+
+        /**
+         * @global
+         * @description 使用相机拍照
+         * @param source {source} 图片来源，有效值 gallery/camera
+         * @param maxWidth {number} 图片宽度
+         * @param maxHeight {number} 图片高度
+         * @param success {function} 成功则返回图片的本地文件路径
+         * @param failure {function} 接口调用失败的回调函数
+         */
+        App.prototype.pickImage = function ({source = 'gallery', maxWidth = 0, maxHeight = 0, success, failure}) {
+            if (success) {
+                callbacks.set("pickImage_success", success);
+            }
+            if (failure) {
+                callbacks.set("pickImage_failure", failure);
+            }
+            var options = {};
+            if (source) {
+                options.source = source;
+            }
+            if (maxWidth) {
+                options.maxWidth = maxWidth;
+            }
+            if (maxHeight) {
+                options.maxHeight = maxHeight;
+            }
+            invokeNativeFunc(_interface, "pickImage", JSON.stringify(options));
+        };
+
+        /**
+         * 从本地相册选择图片
+         * @param width {number} 图片宽度
+         * @param height {number} 图片高度
+         * @param success {function} 成功则返回图片的本地文件路径
+         * @param failure {function} 接口调用失败的回调函数
+         */
+        App.prototype.pickPhoto = function ({width, height, success, failure}) {
+            if (success) {
+                callbacks.set("pickPhoto_success", success);
+            }
+            if (failure) {
+                callbacks.set("pickPhoto_failure", failure);
+            }
+            var size = {};
+            if (width) {
+                size.width = width;
+            }
+            if (height) {
+                size.height = height;
+            }
+            invokeNativeFunc(_interface, "pickPhoto", JSON.stringify(size));
+        };
+
+        /**
+         * 录音器
+         * @param pointer
+         * @constructor
+         */
+        function AudioRecorder(pointer) {
+            this.pointer = pointer;
+            objects.set(this.pointer, this);
+        }
+
+        /**
+         * 准备录音
+         */
+        AudioRecorder.prototype.prepare = function () {
+            invokeNativeFunc(_interface, "AudioRecorder_prepare", this.pointer);
+        };
+
+        /**
+         * 开始录音
+         */
+        AudioRecorder.prototype.start = function () {
+            invokeNativeFunc(_interface, "AudioRecorder_start", this.pointer);
+        };
+
+        /**
+         * 继续录音
+         */
+        AudioRecorder.prototype.resume = function () {
+            invokeNativeFunc(_interface, "AudioRecorder_resume", this.pointer);
+        };
+
+        /**
+         * 暂停录音
+         */
+        AudioRecorder.prototype.pause = function () {
+            invokeNativeFunc(_interface, "AudioRecorder_pause", this.pointer);
+        };
+
+        /**
+         * 结束录音
+         */
+        AudioRecorder.prototype.stop = function () {
+            invokeNativeFunc(_interface, "AudioRecorder_stop", this.pointer);
+        };
+
+        /**
+         * 获取录音器状态码
+         * @returns {number}
+         */
+        AudioRecorder.prototype.getState = function () {
+            return invokeNativeFunc(_interface, "AudioRecorder_getState", this.pointer);
+        };
+
+        /**
+         * 获取录音文件本地路径
+         * @returns {string}
+         */
+        AudioRecorder.prototype.getFilePath = function () {
+            return invokeNativeFunc(_interface, "AudioRecorder_getPath", this.pointer);
+        };
+
+        /**
+         * 释放对象
+         */
+        AudioRecorder.prototype.release = function () {
+            objects.remove(this.pointer);
+            invokeNativeFunc(_interface, "AudioRecorder_release", this.pointer);
+        };
+
+        /**
+         * 创建录音器实例
+         * @param format {string} 音频格式，有效值 wav/mp3
+         * @param sampleRate {number} 采样率，有效值 8000/16000/44100
+         * @param channels {number} 录音通道数，有效值 1/2
+         * @param bitPerSample {number} 每个样本的位数，有效值 8/16
+         * @param error {function}
+         * @returns {AudioRecorder}
+         */
+        App.prototype.createAudioRecorder = function (format = 'mp3', {
+            sampleRate = 44100,
+            channels = 1,
+            bitPerSample = 16,
+            error
+        }) {
+            var options = {};
+            options.sampleRate = sampleRate;
+            options.channels = channels;
+            options.bitPerSample = bitPerSample;
+            var pointer = invokeNativeFunc(_interface, "AudioRecorder_create", format, JSON.stringify(options));
+            if (pointer === -1) {
+                return null;
+            } else {
+                var recorder = new AudioRecorder(pointer);
+                if (error) {
+                    recorder.error = error;
+                }
+                return recorder;
+            }
+        };
+
+        /**
+         * 音频播放器
+         * @param pointer
+         * @constructor
+         */
+        function AudioPlayer(pointer) {
+            this.pointer = pointer;
+            objects.set(pointer, this);
+        }
+
+        /**
+         * 准备播放
+         */
+        AudioPlayer.prototype.prepare = function () {
+            invokeNativeFunc(_interface, "AudioPlayer_prepare", this.pointer);
+        };
+
+        /**
+         * 开始播放
+         */
+        AudioPlayer.prototype.start = function () {
+            invokeNativeFunc(_interface, "AudioPlayer_start", this.pointer);
+        };
+
+        /**
+         * 继续播放
+         */
+        AudioPlayer.prototype.resume = function () {
+            invokeNativeFunc(_interface, "AudioPlayer_resume", this.pointer);
+        };
+
+        /**
+         * 暂停播放
+         */
+        AudioPlayer.prototype.pause = function () {
+            invokeNativeFunc(_interface, "AudioPlayer_pause", this.pointer);
+        };
+
+        /**
+         * 停止播放
+         */
+        AudioPlayer.prototype.stop = function () {
+            invokeNativeFunc(_interface, "AudioPlayer_stop", this.pointer);
+        };
+
+        /**
+         * 跳转到指定位置
+         * @param msec {number} 单位ms
+         */
+        AudioPlayer.prototype.seekTo = function (msec) {
+            invokeNativeFunc(_interface, "AudioPlayer_seekTo", this.pointer, msec);
+        };
+
+        /**
+         * 重置播放器，回到IDLE状态
+         */
+        AudioPlayer.prototype.reset = function () {
+            invokeNativeFunc(_interface, "AudioPlayer_reset", this.pointer);
+        };
+
+        /**
+         * 获取播放器状态码
+         * @returns {number}
+         */
+        AudioPlayer.prototype.getState = function () {
+            return invokeNativeFunc(_interface, "AudioPlayer_getState", this.pointer);
+        };
+
+        /**
+         * 获取音频时长，单位ms
+         * @returns {number}
+         */
+        AudioPlayer.prototype.getDuration = function () {
+            return invokeNativeFunc(_interface, "AudioPlayer_getDuration", this.pointer);
+        };
+
+        /**
+         * 获取当前播放的位置，单位ms
+         * @returns {number}
+         */
+        AudioPlayer.prototype.getPosition = function () {
+            return invokeNativeFunc(_interface, "AudioPlayer_getPosition", this.pointer);
+        };
+
+        /**
+         * 释放对象
+         */
+        AudioPlayer.prototype.release = function () {
+            objects.delete(this.pointer);
+            invokeNativeFunc(_interface, "AudioPlayer_release", this.pointer);
+        };
+
+        /**
+         * 创建音频播放器实例，支持aac/mp3/ogg/pcm格式
+         * @param path {string} 音频URL或音频的本地路径
+         * @param loop {boolean} 是否循环播放，默认 false
+         * @param volume {number} 音量，范围 0~1
+         * @param complete {function} 播放完成的回调函数
+         * @param error {function} 播放出错的回调函数
+         * @returns {AudioPlayer}
+         */
+        App.prototype.createAudioPlayer = function (path, {loop = false, volume = 1, complete, error}) {
+            var options = {};
+            options.loop = loop;
+            options.volume = volume;
+            var pointer = invokeNativeFunc(_interface, "AudioPlayer_create", path, JSON.stringify(options));
+            if (pointer === -1) {
+                return null;
+            } else {
+                var player = new AudioPlayer(pointer);
+                if (complete) {
+                    player.complete = complete;
+                }
+                if (error) {
+                    player.error = error;
+                }
+                return player;
+            }
+        };
+    })("android_media");
+
+    (function (_interface) {
+        /**
+         * 获取文件信息
+         * @param path {string} 本地文件路径
+         * @returns {FileInfo}
+         */
+        App.prototype.getFileInfo = function (path) {
+            var fileInfo = invokeNativeFunc(_interface, "getFileInfo", path);
+            if (fileInfo) {
+                return JSON.parse(fileInfo);
+            }
+            return null;
+        };
+
+        function FileInfo() {
+            this.name = null;
+            this.parent = null;
+            this.path = null;
+            this.isDirectory = null;
+            this.lastModified = null;
+            this.length = null;
+            this.access = null;
+        }
+
+        /**
+         * 文件是否存在
+         * @param path {string} 本地文件路径
+         * @returns {boolean}
+         */
+        App.prototype.fileExists = function (path) {
+            return invokeNativeFunc(_interface, "fileExists", path);
+        };
+
+        /**
+         * 创建文件
+         * @param path {string} 本地文件路径
+         * @returns {Object}
+         */
+        App.prototype.createFile = function (path) {
+            var fileInfo = invokeNativeFunc(_interface, "createFile", path);
+            if (fileInfo) {
+                return JSON.parse(fileInfo);
+            }
+            return null;
+        };
+
+        /**
+         * 创建文件夹
+         * @param path {string} 本地文件夹路径
+         * @returns {Object}
+         */
+        App.prototype.createDirectory = function (path) {
+            var fileInfo = invokeNativeFunc(_interface, "createDirectory", path);
+            if (fileInfo) {
+                return JSON.parse(fileInfo);
+            }
+            return null;
+        };
+
+        /**
+         * 删除文件
+         * @param path {string} 本地文件路径
+         * @returns {boolean}
+         */
+        App.prototype.deleteFile = function (path) {
+            return invokeNativeFunc(_interface, "deleteFile", path);
+        };
+
+        /**
+         * 删除文件夹
+         * @param path {string} 本地文件夹路径
+         * @returns {boolean}
+         */
+        App.prototype.deleteDirectory = function (path) {
+            return invokeNativeFunc(_interface, "deleteDirectory", path);
+        };
+
+        /**
+         * 列出文件夹下所有文件
+         * @param path {string} 本地文件夹路径
+         * @returns {Array}
+         */
+        App.prototype.listFiles = function (path) {
+            var files = invokeNativeFunc(_interface, "listFiles", path);
+            if (files) {
+                return JSON.parse(files);
+            }
+            return null;
+        };
+
+        /**
+         * 重命名文件
+         * @param path {string} 本地文件路径
+         * @param newName {string} 新文件名
+         * @returns {boolean}
+         */
+        App.prototype.renameFile = function (path, newName) {
+            return invokeNativeFunc(_interface, "renameFile", path, newName);
+        };
+
+        /**
+         * 复制文件到指定位置
+         * @param src {string} 源文件路径
+         * @param dest {string} 目标文件路径
+         * @param success {function} 复制成功回调函数
+         * @param failure {function} 复制失败回调函数
+         */
+        App.prototype.copyFile = function (src, dest, {success, failure}) {
+            if (success) {
+                callbacks.set("copyFile_success", success);
+            }
+            if (failure) {
+                callbacks.set("copyFile_failure", failure);
+            }
+            invokeNativeFunc(_interface, "copyFile", src, dest);
+        };
+
+        /**
+         * '/data/data/&lt;application package>/cache/'
+         * @returns {string}
+         */
+        App.prototype.getCacheDir = function () {
+            return invokeNativeFunc(_interface, "getCacheDir");
+        };
+
+        /**
+         * '/data/data/&lt;application package>/files/'
+         * @returns {string}
+         */
+        App.prototype.getFilesDir = function () {
+            return invokeNativeFunc(_interface, "getFilesDir");
+        };
+
+        /**
+         * '&lt;sdcard root>/Android/data/&lt;application package>/cache/'
+         * @returns {string}
+         */
+        App.prototype.getExternalCacheDir = function () {
+            return invokeNativeFunc(_interface, "getExternalCacheDir");
+        };
+
+        /**
+         * '&lt;sdcard root>/Android/data/&lt;application package>/files/&lt;type>/'
+         * @param type {string}
+         * @returns {string}
+         */
+        App.prototype.getExternalFilesDir = function (type) {
+            return invokeNativeFunc(_interface, "getExternalFilesDir", type);
+        };
+
+        /**
+         * '&lt;sdcard root>/&lt;type>/'
+         * @param type {string}
+         * @returns {string}
+         */
+        App.prototype.getExternalStorageDir = function ({type}) {
+            return invokeNativeFunc(_interface, "getExternalStorageDir", type);
+        };
+
+        function Preferences(pointer) {
+            this.pointer = pointer;
+            objects.set(pointer, this);
+        }
+
+        /**
+         * 判断key是否存在
+         * @param key {string} 键
+         * @returns {boolean}
+         */
+        Preferences.prototype.contains = function (key) {
+            return invokeNativeFunc(_interface, "Preferences_contains", this.pointer, key);
+        };
+
+        /**
+         * 通过key获取value
+         * @param key {string} 键
+         * @returns {string}
+         */
+        Preferences.prototype.get = function (key) {
+            return invokeNativeFunc(_interface, "Preferences_get", this.pointer, key);
+        };
+
+        /**
+         * 设置key-value
+         * @param key {string} 键
+         * @param value {string} 值
+         * @returns {boolean}
+         */
+        Preferences.prototype.set = function (key, value) {
+            return invokeNativeFunc(_interface, "Preferences_set", this.pointer, key, value);
+        };
+
+        /**
+         * 移除key
+         * @param key {string} 键
+         * @returns {boolean}
+         */
+        Preferences.prototype.remove = function (key) {
+            return invokeNativeFunc(_interface, "Preferences_remove", this.pointer, key);
+        };
+
+        /**
+         * 清除
+         * @returns {boolean}
+         */
+        Preferences.prototype.clear = function () {
+            return invokeNativeFunc(_interface, "Preferences_clear", this.pointer);
+        };
+
+        /**
+         * 释放对象
+         */
+        Preferences.prototype.release = function () {
+            objects.delete(this.pointer);
+            invokeNativeFunc(_interface, "Preferences_release", this.pointer);
+        };
+
+        /**
+         * 创建Preferences实例
+         * @param name pref名字
+         * @returns {Preferences}
+         */
+        App.prototype.createPreferences = function (name) {
+            var pointer = invokeNativeFunc(_interface, "Preferences_create", name);
+            if (pointer === -1) {
+                return null;
+            } else {
+                return new Preferences(pointer);
+            }
+        };
+    })("android_file");
+
+    (function (_interface) {
+        /**
+         * 发起网络请求
+         * @param url {string} 请求地址
+         * @param method {string} 默认 GET，有效值 GET/HEAD/POST/PUT/DELETE/PATCH
+         * @param data {Object} 请求的参数
+         * @param headers {Object} 请求的header
+         * @param timeout {number} 超时时长
+         * @param response {function} 成功响应的回调函数
+         * @param failure {function} 接口调用失败的回调函数
+         */
+        App.prototype.request = function (url, {
+            method = 'GET', data, headers, timeout, response, failure
+        }) {
+            if (response) {
+                callbacks.set("request_response", response);
+            }
+            if (failure) {
+                callbacks.set("request_failure", failure);
+            }
+            if (data) {
+                data = JSON.stringify(data);
+            } else {
+                data = null;
+            }
+            if (headers) {
+                headers = JSON.stringify(headers);
+            } else {
+                headers = null;
+            }
+            invokeNativeFunc(_interface, "request", url, method, data, headers, timeout);
+        };
+
+        /**
+         * 上传资源
+         * @param url {string} 上传资源的 url
+         * @param name {string} 文件对应的 key , 开发者在服务器端通过这个 key 可以获取到文件二进制内容
+         * @param path {string} 要上传文件资源的路径
+         * @param data {Object} 请求的参数
+         * @param headers {Object} 请求的header
+         * @param timeout {number} 超时时长
+         * @param response {function} 成功响应的回调函数
+         * @param failure {function} 接口调用失败的回调函数
+         */
+        App.prototype.upload = function (url, name, path, {
+            data, headers, timeout, response, failure
+        }) {
+            if (response) {
+                callbacks.set("upload_response", response);
+            }
+            if (failure) {
+                callbacks.set("upload_failure", failure);
+            }
+            if (data) {
+                data = JSON.stringify(data);
+            } else {
+                data = null;
+            }
+            if (headers) {
+                headers = JSON.stringify(headers);
+            } else {
+                headers = null;
+            }
+            invokeNativeFunc(_interface, "upload", url, name, path, data, headers, timeout);
+        };
+
+        /**
+         * 下载资源
+         * @param url 下载资源的 url
+         * @param dir 下载目录
+         * @param headers {Object} 请求的header
+         * @param timeout {number} 超时时长
+         * @param response {function} 成功响应的回调函数
+         * @param failure {function} 接口调用失败的回调函数
+         */
+        App.prototype.download = function (url, {
+            dir = null, headers, timeout, response, failure
+        }) {
+            if (response) {
+                callbacks.set("download_response", response);
+            }
+            if (failure) {
+                callbacks.set("download_failure", failure);
+            }
+            if (headers) {
+                headers = JSON.stringify(headers);
+            } else {
+                headers = null;
+            }
+            invokeNativeFunc(_interface, "download", url, dir, headers, timeout);
+        };
+    })("android_net");
+
+    (function (_interface) {
+
+        /**
+         * 获取应用包信息
+         * @returns {PkgInfo}
+         */
+        App.prototype.getPackageInfo = function () {
+            var pkgInfo = invokeNativeFunc(_interface, "getPackageInfo");
+            if (pkgInfo) {
+                return JSON.parse(pkgInfo);
+            }
+            return null;
+        };
+
+        function PkgInfo() {
+            this.appName = null;
+            this.pkgName = null;
+            this.versionCode = 0;
+            this.versionName = null;
+        }
+
+        /**
+         * 获取设备信息
+         * @returns {DeviceInfo}
+         */
+        App.prototype.getDeviceInfo = function () {
+            var deviceInfo = invokeNativeFunc(_interface, "getDeviceInfo");
+            if (deviceInfo) {
+                return JSON.parse(deviceInfo);
+            }
+            return null;
+        };
+
+        function DeviceInfo() {
+            /**
+             * @type {DeviceVersion}
+             */
+            this.version = null;
+            this.board = null;
+            this.bootloader = null;
+            this.brand = null;
+            this.device = null;
+            this.display = null;
+            this.fingerprint = null;
+            this.hardware = null;
+            this.host = null;
+            this.id = null;
+            this.manufacturer = null;
+            this.model = null;
+            this.product = null;
+            this.tags = null;
+            this.type = null;
+            this.isEmulator = false;
+        }
+
+        function DeviceVersion() {
+            this.baseOS = null;
+            this.previewSdkInt = 0;
+            this.securityPatch = null;
+            this.codename = null;
+            this.incremental = null;
+            this.release = null;
+            this.sdkInt = 0;
+        }
+
+        /**
+         * 获取设备的IMEI号
+         * @returns {string}
+         */
+        App.prototype.getIMEI = function () {
+            return invokeNativeFunc(_interface, "getIMEI");
+        };
+
+        /**
+         * 获取当前的网络类型
+         * @returns {number}
+         */
+        App.prototype.getNetworkType = function () {
+            return invokeNativeFunc(_interface, "getNetworkType");
+        };
+
+        /**
+         * 获取当前的位置
+         * @param success {function} 接口调用成功的回调函数
+         * @param failure {function} 接口调用失败的回调函数
+         */
+        App.prototype.getLocation = function ({success, failure}) {
+            if (success) {
+                callbacks.set("getLocation_success", success);
+            }
+            if (failure) {
+                callbacks.set("getLocation_failure", failure);
+            }
+            invokeNativeFunc(_interface, "getLocation");
+        };
+
+        /**
+         * 拨打电话
+         * @param phoneNumber {number} 电话号码
+         */
+        App.prototype.makePhoneCall = function (phoneNumber) {
+            invokeNativeFunc(_interface, "makePhoneCall", phoneNumber);
+        };
+
+        /**
+         * 发送短信
+         * @param phoneNumber 电话号码
+         * @param message 发送短信内容
+         */
+        App.prototype.makeSMS = function (phoneNumber, message) {
+            invokeNativeFunc(_interface, "makeSMS", phoneNumber, message);
+        };
+
+        /**
+         * 设置剪切板内容
+         * @param data {string} 剪切板内容
+         */
+        App.prototype.setClipboardData = function (data) {
+            invokeNativeFunc(_interface, "setClipboardData", data);
+        };
+
+        /**
+         * 获取剪切板内容
+         * @returns {string} 剪切板内容
+         */
+        App.prototype.getClipboardData = function () {
+            return invokeNativeFunc(_interface, "getClipboardData");
+        };
+
+        /**
+         * 截屏
+         * @param success {function} 接口调用成功的回调函数
+         * @param failure {function} 接口调用失败的回调函数
+         */
+        App.prototype.captureScreen = function ({success, failure}) {
+            if (success) {
+                callbacks.set("captureScreen_success", success);
+            }
+            if (failure) {
+                callbacks.set("captureScreen_failure", failure);
+            }
+            invokeNativeFunc(_interface, "captureScreen");
+        };
+
+        /**
+         * 振动
+         * @param duration {number} 震动的时长
+         */
+        App.prototype.vibrate = function (duration = 15) {
+            invokeNativeFunc(_interface, "vibrate", duration);
+        };
+    })("android_device");
+
+    (function (_interface) {
+
+        /**
+         * 显示toast
+         * @param text {string} toast文本
+         */
+        App.prototype.showToast = function ({text}) {
+            invokeNativeFunc(_interface, "showToast", text);
+        };
+
+        /**
+         * 显示通知栏
+         * @param id {number} 通知栏ID
+         * @param contentTitle {string} 通知栏标题
+         * @param contentText {string} 通知栏显示内容
+         * @param ticker {string} 通知在第一次到达时在状态栏中显示的文本
+         * @param priority {number} 通知优先级
+         * @param number {number} 通知集合的数量
+         * @param autoCancel {boolean} 当用户点击面板是否让通知自动取消
+         * @param ongoing {boolean} 是否为一个正在进行的通知
+         * @param smallIcon {string} 通知的小图标，本地文件路径
+         * @param largeIcon {string} 通知的大图标，本地文件路径
+         * @param category {string} 通知类别
+         * @param contentInfo {string} 通知的右侧设置大文本
+         * @param sound {string} 通知提醒铃声，本地文件路径
+         * @param vibrate {number[]} 使用震动模式
+         * @param onlyAlertOnce {boolean} 设置仅提醒一次
+         * @param navigateTo {string} 点击通知栏后跳转的html页面
+         */
+        App.prototype.showNotification = function (
+            {
+                id = 1,
+                contentTitle,
+                contentText,
+                ticker,
+                priority,
+                number,
+                autoCancel,
+                ongoing,
+                smallIcon,
+                largeIcon,
+                category,
+                contentInfo,
+                sound,
+                vibrate,
+                onlyAlertOnce,
+                navigateTo
+            }) {
+            var options = {};
+            options.id = id;
+            if (contentTitle) {
+                options.contentTitle = contentTitle;
+            }
+            if (contentText) {
+                options.contentText = contentText;
+            }
+            if (ticker) {
+                options.ticker = ticker;
+            }
+            if (priority) {
+                options.priority = priority;
+            }
+            if (number) {
+                options.number = number;
+            }
+            if (autoCancel) {
+                options.autoCancel = autoCancel;
+            }
+            if (ongoing) {
+                options.ongoing = ongoing;
+            }
+            if (smallIcon) {
+                options.smallIcon = smallIcon;
+            }
+            if (largeIcon) {
+                options.largeIcon = largeIcon;
+            }
+            if (category) {
+                options.category = category;
+            }
+            if (contentInfo) {
+                options.contentInfo = contentInfo;
+            }
+            if (sound) {
+                options.sound = sound;
+            }
+            if (vibrate) {
+                options.vibrate = vibrate;
+            }
+            if (onlyAlertOnce) {
+                options.onlyAlertOnce = onlyAlertOnce;
+            }
+            if (navigateTo) {
+                options.navigateTo = navigateTo;
+            }
+            options = JSON.stringify(options);
+            invokeNativeFunc(_interface, "showNotification", options);
+        };
+
+        /**
+         * 移除通知栏
+         * @param id {number} 通知栏ID
+         */
+        App.prototype.removeNotification = function ({id = 1}) {
+            invokeNativeFunc(_interface, "removeNotification", id);
+        };
+    })("android_ui");
+
+    return new App();
+})();
+
+
+
+
+
+
+
+
+
+
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+
+        
+
+        <footer>
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Aug 09 2018 15:07:23 GMT+0800 (中国标准时间)
+        </footer>
+    </div>
+</div>
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+<script src="scripts/main.js"></script>
+</body>
+</html>

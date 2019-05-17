@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>File</title>
+
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="io.js"></script>
+</head>
+<body>
+    <button onclick="set()">保存</button>
+    <button onclick="get()">显示</button>
+    <button onclick="copyFile()">复制文件</button>
+    <script>
+        // var fileInfo = app.getFileInfo("sdcard/Music/test.mp3");
+        // alert("name:" + fileInfo.name);
+        // alert("path:" + fileInfo.path);
+        // alert("parent:" + fileInfo.parent);
+        // alert("isDirectory:" + fileInfo.isDirectory);
+        // alert("length:" + fileInfo.length);
+        // alert("lastModified:" + fileInfo.lastModified);
+        // alert("access:" + fileInfo.access);
+
+        // var fileInfoArray = app.listFiles({
+        //     path: 'sdcard/Music'
+        // });
+        // if (fileInfoArray) {
+        //     fileInfoArray.forEach(function (fileInfo, index) {
+        //         alert('index:' + index + " fileName:" + fileInfo.name);
+        //     });
+        // }
+        //
+        // app.copyFile({
+        //     src: '',
+        //     dest: '',
+        //     success: function () {
+        //
+        //     },
+        //     failure: function () {
+        //
+        //     }
+        // });
+        //
+
+        // function set() {
+        //     var pref = app.createPreferences("account");
+        //     try {
+        //         pref.set("username", "wujie");
+        //         pref.set("password", "123456");
+        //     } finally {
+        //         pref.release();
+        //     }
+        // }
+        //
+        // function get() {
+        //     var pref = app.createPreferences("account");
+        //     try {
+        //         return pref.get('username');
+        //     } finally {
+        //         pref.release();
+        //     }
+        // }
+
+        function set() {
+            app.writeStringToFile({
+                path: 'file:///sdcard/test.txt',
+                text: '驿外断桥边⑵，寂寞开无主⑶。已是黄昏独自愁，更著风和雨⑷。\n' +
+                '无意苦争春⑸，一任群芳妒⑹。零落成泥碾作尘⑺，只有香如故⑻。',
+                append: false,
+                success: function () {
+                    alert('success');
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        }
+
+        function get() {
+            app.readStringFromFile({
+                path: 'file:///sdcard/test.txt',
+                success: function (content) {
+                    alert(content);
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        }
+
+        function copyFile() {
+            app.copyFile({
+                src: app.getExternalStorageDir({}) + "/处置通_1.0.2.apk",
+                dest: app.getExternalStorageDir({type: 'Download'}) + "/chuzhitong.apk",
+                success: function () {
+                    alert('success');
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            })
+        }
+    </script>
+</body>
+</html>

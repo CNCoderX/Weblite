@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>执法通</title>
+
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+
+    <style>
+        @font-face {
+            font-family: 'iconfont';
+            src: url('iconfont/iconfont.eot');
+            src: url('iconfont/iconfont.eot?#iefix') format('embedded-opentype'),
+            url('iconfont/iconfont.woff') format('woff'),
+            url('iconfont/iconfont.ttf') format('truetype'),
+            url('iconfont/iconfont.svg#iconfont') format('svg');
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body {
+            height:100%;
+            background-color: #F4F4F4;
+            overflow:hidden;
+        }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        #main-title {
+            width: 100%;
+            height: 45px;
+            line-height: 45px;
+            text-align: center;
+            font-size: 20px;
+            color: white;
+            background-color: #009aff;
+        }
+
+        #main-content {
+            display: flex;
+            flex: 1 0 auto;
+        }
+
+        #main-content-iframe {
+            width: 100%;
+            flex: 1;
+        }
+
+        #main-navbar {
+            display: flex;
+            flex: 0 0 auto;
+            bottom: 0;
+            height: 46px;
+            padding-top: 5px;
+            color: #474747;
+            border-top: 1px solid #bababa;
+            background-color: #f9f9f9;
+        }
+
+        .nav-item {
+            flex: 1;
+            /*cursor: pointer;*/
+            text-align: center;
+            line-height: 24px;
+        }
+
+        .nav-item span {
+            display: block;
+        }
+
+        .selected .nav-item-ico {
+            color: #009aff;
+        }
+
+        .nav-item-ico {
+            font-family: "iconfont" !important;
+            font-size: 28px;
+            font-style: normal;
+            color: #a0a0a0;
+        }
+
+        .selected .nav-item-text {
+            color: #009aff;
+        }
+
+        .nav-item-text {
+            font-size: 13px;
+            color: #a0a0a0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div id="main-title">
+            执法通
+        </div>
+
+        <div id="main-content">
+
+        </div>
+
+        <div id="main-navbar">
+            <div id="nav_function" class="nav-item">
+                <span class="nav-item-ico">&#xe70c;</span>
+                <span class="nav-item-text">功能</span>
+            </div>
+            <div id="nav_settings" class="nav-item">
+                <span class="nav-item-ico">&#xe72a;</span>
+                <span class="nav-item-text">设置</span>
+            </div>
+            <!--<div id="nav_message" class="nav-item">-->
+                <!--<span class="nav-item-ico">&#xe744;</span>-->
+                <!--<span class="nav-item-text">消息</span>-->
+            <!--</div>-->
+        </div>
+    </div>
+
+    <script>
+        $(".nav-item").each(function (index, item) {
+            $(item).click(function (event) {
+                if (!$(item).hasClass("selected")) {
+                    $(".nav-item").each(function (index2, item2) {
+                        if (item !== item2) {
+                            $(item2).removeClass("selected");
+                        } else {
+                            $(item2).addClass("selected");
+                            onNavItemSelected(index2, item2);
+                        }
+                    });
+                }
+            });
+        });
+
+        function onNavItemSelected(index, item) {
+            switch (index) {
+                // case 0:
+                //     $("#main-content").attr("src", "message.html");
+                //     break;
+                case 0:
+                    openUrl(func_url);
+                    // $("#main-content-iframe").attr("src", func_url);
+                    break;
+                case 1:
+                    openUrl("setting.html");
+                    // $("#main-content-iframe").attr("src", "setting.html");
+                    break;
+                <!--case 2:-->
+                    <!--openUrl("message.html");-->
+                    <!--break;-->
+            }
+        }
+
+        function openUrl(url) {
+            var iframe = '<iframe id="main-content-iframe"' +
+                'name="fragment"' +
+                'src="' + url + '"' +
+                'frameborder="0"' +
+                'scrolling="true"' +
+                'allowfullscreen="true"' +
+                'webkitallowfullscreen="true"' +
+                'mozallowfullscreen="true"' +
+                '></iframe>';
+            $('#main-content-iframe').remove();
+            $('#main-content').html(iframe);
+        }
+
+        var func_url = "../index.html";
+
+        function getQueryStringValue (key) {
+            return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" +
+                encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+        }
+
+        window.onload = function () {
+            var ip = getQueryStringValue("host");
+            func_url = "http://" + ip + "/webwechat/mobile/zhifa/app.html";
+
+            setTimeout(function () {
+                $("#nav_function").trigger("click");
+            }, 100);
+        };
+
+        window.invokeCallback = function () {
+            fragment.window.invokeCallback.apply(window, arguments);
+        };
+
+        window.removeCallback = function (pointer) {
+            fragment.window.removeCallback.apply(window, arguments);
+        };
+    </script>
+</body>
+</html>
